@@ -1,5 +1,8 @@
 const mongoose = require('mongoose');
 const npmValidator = require('validator');
+const bcrypt = require('bcryptjs');
+
+const UnauthorizedError = require('../errors/unauthorized-err');
 
 const userSchema = new mongoose.Schema({
   email: {
@@ -23,6 +26,27 @@ const userSchema = new mongoose.Schema({
   },
 
 });
+
+userSchema.statics.findUserByCredentials = function (email, password) {
+  // попытаемся найти пользователя по почте
+  return this.findOne({ email }).select('+password')
+    .then((user) => {
+      // не нашёлся — отправляем ошибку
+      if (!user) {
+        throw new UnauthorizedError('Неправильная почта или пароль');
+      }
+      // нашёлся — сравниваем хеши
+      return bcrypt.compare(password, user.password)
+        .then((matched) => {
+          if (!matched) {
+            throw new UnauthorizedError('Неправильная почта или пароль');
+          }
+          // вернем для доступа к этому объекту в контроллере
+          return user;
+        });
+    });
+  // блок catch находится в контроллере
+};
 
 // добавим функцию для сокрытия пароля из выдачи по api-запросам
 function hidePassword() {

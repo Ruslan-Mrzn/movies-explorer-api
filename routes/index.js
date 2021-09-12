@@ -1,53 +1,39 @@
 const router = require('express').Router();
 const { celebrate, Joi } = require('celebrate'); // миддлвар для валидации приходящих на сервер запросов
 
-const {
-  checkURL,
-  checkRuLang,
-  checkEnLang,
-} = require('../utils/utils');
+const NotFoundError = require('../errors/not-found-err');
 
 const {
-  getCurrentUser,
-  updateProfile,
+  login, createUser, logout,
 } = require('../controllers/users');
 
-const {
-  getMovies,
-  createMovie,
-  deleteMovie,
-} = require('../controllers/movies');
-
-router.get('/users/me', getCurrentUser);
-
-router.patch('/users/me', celebrate({
+router.post('/signin', celebrate({
   body: Joi.object().keys({
-    name: Joi.string().min(2).max(30).required(),
     email: Joi.string().required().email(),
+    password: Joi.string().required().min(4),
   }),
-}), updateProfile);
+}), login);
 
-router.get('/movies', getMovies);
-
-router.post('/movies', celebrate({
+router.post('/signup', celebrate({
   body: Joi.object().keys({
-    country: Joi.string().required(),
-    director: Joi.string().required(),
-    duration: Joi.number().required(),
-    year: Joi.string().required(),
-    description: Joi.string().required(),
-    image: Joi.string().custom(checkURL).required(),
-    trailer: Joi.string().custom(checkURL).required(),
-    thumbnail: Joi.string().custom(checkURL).required(),
-    // id фильма, который содержится в ответе сервиса MoviesExplorer
-    // пока не будем делать ссылкой на какую-то схему,
-    // оставим String
-    movieId: Joi.string().required(),
-    nameRU: Joi.string().custom(checkRuLang).required(),
-    nameEN: Joi.string().custom(checkEnLang).required(),
+    email: Joi.string().required().email(),
+    password: Joi.string().required().min(4),
+    name: Joi.string().min(2).max(30).required(),
   }),
-}), createMovie);
+}), createUser);
 
-router.delete('/movies/:id', deleteMovie);
+router.use(celebrate({
+  cookies: Joi.object().keys({
+    jwt: Joi.string().required(), // возможно еще что-то нужно будет проверить
+  }),
+}), require('../middlewares/auth'));
+
+router.post('/signout', logout);
+
+router.use('/users', require('./users'));
+
+router.use('/movies', require('./movies'));
+
+router.use('*', () => { throw new NotFoundError('Ресурс не найден'); });
 
 module.exports = router;

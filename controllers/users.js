@@ -44,6 +44,9 @@ module.exports.updateProfile = (req, res, next) => {
         next(new IncorrectDataError('Ошибка! Переданы некорректные данные при обновлении профиля пользователя'));
         return;
       }
+      if (err.name === 'MongoError' && err.code === 11000) {
+        next(new ConflictError('Пользователь с данным email уже зарегистрирован'));
+      }
       if (err.name === 'CastError') {
         next(new IncorrectDataError('Невалидный id пользователя'));
         return;

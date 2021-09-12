@@ -1,12 +1,19 @@
 const validator = require('validator');
 
-const { JWT_SECRET } = process.env;
+const { JWT_SECRET, MONGODB_ADDRESS } = process.env;
 
 module.exports.getSecret = () => {
   if (process.env.NODE_ENV === 'production') {
     return JWT_SECRET;
   }
   return 'devMode';
+};
+
+module.exports.getMongoAddress = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return MONGODB_ADDRESS;
+  }
+  return 'mongodb://localhost:27017/moviesdb';
 };
 
 module.exports.checkURL = (value) => {

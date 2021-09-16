@@ -8,8 +8,6 @@ const { errors } = require('celebrate'); // миддлвар для валида
 const { limiter } = require('./middlewares/rate-limiter-config'); // ограничение числа запросов в едницу времени
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-// const NotFoundError = require('./errors/not-found-err');
-
 const { getSecret, getMongoAddress } = require('./utils/utils'); // вспомогательные кастомные утилиты
 
 const app = express();

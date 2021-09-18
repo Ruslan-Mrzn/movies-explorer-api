@@ -9,6 +9,8 @@ const {
   login, createUser, logout,
 } = require('../controllers/users');
 
+const { resourceNotFound } = require('../utils/messages');
+
 const NotFoundError = require('../errors/not-found-err');
 
 router.post('/signin', validateUserSignup, login);
@@ -23,6 +25,6 @@ router.use('/users', require('./users'));
 
 router.use('/movies', require('./movies'));
 
-router.use('*', () => { throw new NotFoundError('Ресурс не найден'); });
+router.use('*', () => { throw new NotFoundError(resourceNotFound); });
 
 module.exports = router;

@@ -8,17 +8,28 @@ const ConflictError = require('../errors/conflict-err');
 
 const { getSecret } = require('../utils/utils');
 
+const {
+  userNotFound,
+  incorrectUserId,
+  incorrectUserData,
+  conflictUserEmail,
+  incorrectEmptyFields,
+  incorrectPassLength,
+  incorrectLoginOrPass,
+  noticeCookiesCleared,
+} = require('../utils/messages');
+
 module.exports.getCurrentUser = (req, res, next) => {
   User.findById(req.user._id)
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Пользователь не найден');
+        throw new NotFoundError(userNotFound);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'CastError') {
-        next(new IncorrectDataError('Невалидный id пользователя'));
+        next(new IncorrectDataError(incorrectUserId));
         return;
       }
       next(err);
@@ -35,20 +46,20 @@ module.exports.updateProfile = (req, res, next) => {
   })
     .then((user) => {
       if (!user) {
-        throw new NotFoundError('Нет пользователя с таким id');
+        throw new NotFoundError(userNotFound);
       }
       res.send(user);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
-        next(new IncorrectDataError('Ошибка! Переданы некорректные данные при обновлении профиля пользователя'));
+        next(new IncorrectDataError(incorrectUserData));
         return;
       }
       if (err.name === 'MongoError' && err.code === 11000) {
-        next(new ConflictError('Пользователь с данным email уже зарегистрирован'));
+        next(new ConflictError(conflictUserEmail));
       }
       if (err.name === 'CastError') {
-        next(new IncorrectDataError('Невалидный id пользователя'));
+        next(new IncorrectDataError(incorrectUserId));
         return;
       }
       next(err);
@@ -60,10 +71,10 @@ module.exports.createUser = (req, res, next) => {
     name, email, password,
   } = req.body;
   if (!email || !password || !name) {
-    throw new IncorrectDataError('Все поля должны быть заполнены');
+    throw new IncorrectDataError(incorrectEmptyFields);
   }
   if (password.length < 4) {
-    throw new IncorrectDataError('Пароль должен состоять не менее чем из 4-х символов');
+    throw new IncorrectDataError(incorrectPassLength);
   }
   bcrypt.hash(password, 10)
     .then((hash) => {
@@ -73,10 +84,10 @@ module.exports.createUser = (req, res, next) => {
         .then((user) => res.send(user.hidePassword()))
         .catch((err) => {
           if (err.name === 'ValidationError') {
-            next(new IncorrectDataError('Ошибка! Переданы некорректные данные при создании пользователя'));
+            next(new IncorrectDataError(incorrectUserData));
           }
           if (err.name === 'MongoError' && err.code === 11000) {
-            next(new ConflictError('Пользователь с данным email уже зарегистрирован'));
+            next(new ConflictError(conflictUserEmail));
           }
           next(err);
         });
@@ -104,10 +115,10 @@ module.exports.login = (req, res, next) => {
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
-    .catch(() => next(new IncorrectDataError('Неверный логин или пароль')));
+    .catch(() => next(new IncorrectDataError(incorrectLoginOrPass)));
 };
 
 module.exports.logout = (req, res, next) => {
-  res.clearCookie('jwt').send({ message: 'cookie удалены' });
+  res.clearCookie('jwt').send({ message: noticeCookiesCleared });
   next();
 };

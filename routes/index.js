@@ -13,17 +13,17 @@ const { resourceNotFound } = require('../utils/messages');
 
 const NotFoundError = require('../errors/not-found-err');
 
-router.post('/signin', validateUserSignup, login);
+router.post('/api/signin', validateUserSignup, login);
 
-router.post('/signup', validateUserSignin, createUser);
+router.post('/api/signup', validateUserSignin, createUser);
 
 router.use(require('../middlewares/auth'));
 
-router.post('/signout', logout);
+router.post('/api/signout', logout);
 
-router.use('/users', require('./users'));
+router.use('/api/users', require('./users'));
 
-router.use('/movies', require('./movies'));
+router.use('/api/movies', require('./movies'));
 
 router.use('*', () => { throw new NotFoundError(resourceNotFound); });
 

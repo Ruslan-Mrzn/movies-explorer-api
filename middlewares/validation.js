@@ -6,19 +6,19 @@ const {
   checkEnLang,
 } = require('../utils/utils');
 
-const validateUserSignup = celebrate({
+const validateUserSignin = celebrate({
   body: Joi.object().keys({
     email: Joi.string().required().email(),
     password: Joi.string().required().min(4),
   }),
 });
 
-const validateUserSignin = celebrate({
+const validateUserSignup = celebrate({
   body: Joi.object().keys({
-    email: Joi.string().required().email(),
+    // email: Joi.string().required().email(),
     password: Joi.string().required().min(4),
     name: Joi.string().min(2).max(30).required(),
-  }),
+  }).unknown(true),
 });
 
 const validateUserPatch = celebrate({
@@ -41,7 +41,7 @@ const validateMoviePost = celebrate({
     // id фильма, который содержится в ответе сервиса MoviesExplorer
     // пока не буду делать ссылкой на какую-то схему,
     // оставлю String
-    movieId: Joi.string().required(),
+    movieId: Joi.number().required(),
     nameRU: Joi.string().custom(checkRuLang).required(),
     nameEN: Joi.string().custom(checkEnLang).required(),
   }),

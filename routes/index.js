@@ -13,9 +13,9 @@ const { resourceNotFound } = require('../utils/messages');
 
 const NotFoundError = require('../errors/not-found-err');
 
-router.post('/api/signin', validateUserSignup, login);
+router.post('/api/signup', validateUserSignup, createUser);
 
-router.post('/api/signup', validateUserSignin, createUser);
+router.post('/api/signin', validateUserSignin, login);
 
 router.use(require('../middlewares/auth'));
 

@@ -18,4 +18,5 @@ module.exports = {
   conflictUserEmail: 'Пользователь с данным email уже зарегистрирован',
   serverError: 'На сервере произошла ошибка',
   noticeCookiesCleared: 'Cookies успешно удалены',
+  noticeMovieRemoved: 'Фильм успешно удален',
 };

@@ -11,6 +11,7 @@ const {
   movieNotFound,
   incorrectMovieId,
   conflictMovieId,
+  noticeMovieRemoved,
 } = require('../utils/messages');
 
 module.exports.getMovies = (req, res, next) => {
@@ -55,9 +56,11 @@ module.exports.createMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new IncorrectDataError(incorrectMovieData));
+        return;
       }
       if (err.name === 'MongoError' && err.code === 11000) {
         next(new ConflictError(conflictMovieId));
+        return;
       }
       next(err);
     });
@@ -74,12 +77,13 @@ module.exports.deleteMovie = (req, res, next) => {
       if (JSON.stringify(movie.owner) !== JSON.stringify(_id)) {
         throw new ForbiddenError(forbiddenMovieRemove);
       }
-      Movie.findByIdAndRemove(movie._id)
-        .then((myMovie) => res.send(myMovie));
+      return Movie.findByIdAndRemove(movie._id)
+        .then(() => res.send({ message: noticeMovieRemoved }));
     })
     .catch((err) => {
       if (err.name === 'CastError') {
         next(new IncorrectDataError(incorrectMovieId));
+        return;
       }
       next(err);
     });

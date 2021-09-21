@@ -55,7 +55,7 @@ const movieSchema = new mongoose.Schema({
   // пока не будем делать ссылкой на какую-то схему,
   // оставим String
   movieId: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
   },

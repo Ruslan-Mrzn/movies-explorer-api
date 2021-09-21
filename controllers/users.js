@@ -10,7 +10,6 @@ const { getSecret } = require('../utils/utils');
 
 const {
   userNotFound,
-  incorrectUserId,
   incorrectUserData,
   conflictUserEmail,
   incorrectEmptyFields,
@@ -27,13 +26,7 @@ module.exports.getCurrentUser = (req, res, next) => {
       }
       res.send(user);
     })
-    .catch((err) => {
-      if (err.name === 'CastError') {
-        next(new IncorrectDataError(incorrectUserId));
-        return;
-      }
-      next(err);
-    });
+    .catch((err) => next(err));
 };
 
 module.exports.updateProfile = (req, res, next) => {
@@ -57,9 +50,10 @@ module.exports.updateProfile = (req, res, next) => {
       }
       if (err.name === 'MongoError' && err.code === 11000) {
         next(new ConflictError(conflictUserEmail));
+        return;
       }
       if (err.name === 'CastError') {
-        next(new IncorrectDataError(incorrectUserId));
+        next(new IncorrectDataError(incorrectUserData));
         return;
       }
       next(err);
@@ -85,9 +79,11 @@ module.exports.createUser = (req, res, next) => {
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new IncorrectDataError(incorrectUserData));
+            return;
           }
           if (err.name === 'MongoError' && err.code === 11000) {
             next(new ConflictError(conflictUserEmail));
+            return;
           }
           next(err);
         });

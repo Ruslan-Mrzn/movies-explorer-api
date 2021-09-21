@@ -27,13 +27,13 @@ mongoose.connect(getMongoAddress(), {
   useUnifiedTopology: true,
 });
 
-app.use(helmet()); // простановка security-заголовков http запросов
-
-app.use(cookieParser(getSecret())); // подключаем парсер кук как мидлвэр
-
 app.use(requestLogger); // подключаем логгер запросов
 
 app.use(limiter); // ограничение кол-ва запросов (защита от DoS-атак)
+
+app.use(helmet()); // простановка security-заголовков http запросов
+
+app.use(cookieParser(getSecret())); // подключаем парсер кук как мидлвэр
 
 app.use(cors({ credentials: true, origin: true })); // cors-мидвара
 

@@ -15,10 +15,10 @@ const validateUserSignin = celebrate({
 
 const validateUserSignup = celebrate({
   body: Joi.object().keys({
-    // email: Joi.string().required().email(),
+    email: Joi.string().required().email(),
     password: Joi.string().required().min(4),
     name: Joi.string().min(2).max(30).required(),
-  }).unknown(true),
+  }),
 });
 
 const validateUserPatch = celebrate({
@@ -39,8 +39,7 @@ const validateMoviePost = celebrate({
     trailer: Joi.string().custom(checkURL).required(),
     thumbnail: Joi.string().custom(checkURL).required(),
     // id фильма, который содержится в ответе сервиса MoviesExplorer
-    // пока не буду делать ссылкой на какую-то схему,
-    // оставлю String
+    // десятичное число
     movieId: Joi.number().required(),
     nameRU: Joi.string().custom(checkRuLang).required(),
     nameEN: Joi.string().custom(checkEnLang).required(),

@@ -52,8 +52,7 @@ const movieSchema = new mongoose.Schema({
   },
 
   // id фильма, который содержится в ответе сервиса MoviesExplorer
-  // пока не будем делать ссылкой на какую-то схему,
-  // оставим String
+  // десятичное число
   movieId: {
     type: Number,
     required: true,

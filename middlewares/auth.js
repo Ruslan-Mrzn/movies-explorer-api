@@ -19,6 +19,7 @@ module.exports = (req, res, next) => {
   } catch (err) {
     if (err.name === 'JsonWebTokenError') {
       next(new UnauthorizedError(unauthorized));
+      return;
     }
     next(err);
   }

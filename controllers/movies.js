@@ -69,7 +69,7 @@ module.exports.createMovie = (req, res, next) => {
 module.exports.deleteMovie = (req, res, next) => {
   const { params: { id }, user: { _id } } = req;
 
-  Movie.findById(id)
+  Movie.findOne({ movieId: id })
     .then((movie) => {
       if (!movie) {
         throw new NotFoundError(movieNotFound);

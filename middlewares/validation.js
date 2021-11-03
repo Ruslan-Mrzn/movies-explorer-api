@@ -2,8 +2,8 @@ const { celebrate, Joi } = require('celebrate'); // миддлвар для ва
 
 const {
   checkURL,
-  checkRuLang,
-  checkEnLang,
+  // checkRuLang,
+  // checkEnLang,
 } = require('../utils/utils');
 
 const validateUserSignin = celebrate({
@@ -41,14 +41,14 @@ const validateMoviePost = celebrate({
     // id фильма, который содержится в ответе сервиса MoviesExplorer
     // десятичное число
     movieId: Joi.number().required(),
-    nameRU: Joi.string().custom(checkRuLang).required(),
-    nameEN: Joi.string().custom(checkEnLang).required(),
+    nameRU: Joi.string().required(),
+    nameEN: Joi.string().required(),
   }),
 });
 
 const validateMovieDelete = celebrate({
   params: Joi.object().keys({
-    id: Joi.string().hex().length(24),
+    id: Joi.number().required(),
   }),
 });
 

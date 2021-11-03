@@ -19,7 +19,7 @@ module.exports.getMongoAddress = () => {
   if (process.env.NODE_ENV === 'production') {
     return MONGODB_ADDRESS;
   }
-  return 'mongodb://localhost:27017/moviesdb';
+  return 'mongodb+srv://rus_mur:929000@cluster0.21xks.mongodb.net/moviesdb?retryWrites=true&w=majority';
 };
 
 module.exports.checkURL = (value) => {

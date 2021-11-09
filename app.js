@@ -27,15 +27,6 @@ mongoose.connect(getMongoAddress(), {
   useUnifiedTopology: true,
 });
 
-app.use((req, res, next) => {
-  req.user = {
-    _id: '617e993d9a1599f38c6e2895' // вставьте сюда _id созданного в предыдущем пункте пользователя
-  };
-
-  next();
-});
-
-
 app.use(requestLogger); // подключаем логгер запросов
 
 app.use(limiter); // ограничение кол-ва запросов (защита от DoS-атак)
@@ -45,7 +36,6 @@ app.use(helmet()); // простановка security-заголовков http 
 app.use(cookieParser(getSecret())); // подключаем парсер кук как мидлвэр
 
 app.use(cors({ credentials: true, origin: true })); // cors-мидвара
-
 
 app.use(require('./routes/index')); // роуты приложения подключены в одном файле
 

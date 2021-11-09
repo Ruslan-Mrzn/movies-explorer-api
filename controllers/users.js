@@ -75,7 +75,21 @@ module.exports.createUser = (req, res, next) => {
       User.create({
         name, email, password: hash,
       })
-        .then((user) => res.send(user.hidePassword()))
+        .then((user) => {
+          const token = jwt.sign({ _id: user._id }, getSecret());
+          // отправим токен, браузер сохранит его в куках
+
+          res
+            .cookie('jwt', token, {
+              // token - наш JWT токен, который мы отправляем
+              // maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
+              httpOnly: true, // такую куку нельзя прочесть из JavaScript
+              // sameSite: 'None',
+              secure: false,
+              // signed: true,
+            })
+            .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
+        })
         .catch((err) => {
           if (err.name === 'ValidationError') {
             next(new IncorrectDataError(incorrectUserData));
@@ -111,7 +125,13 @@ module.exports.login = (req, res, next) => {
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
-    .catch(() => next(new IncorrectDataError(incorrectLoginOrPass)));
+    .catch((err) => {
+      if (err.name === 'ValidationError') {
+        next(new IncorrectDataError(incorrectLoginOrPass));
+        return;
+      }
+      next(err);
+    });
 };
 
 module.exports.logout = (req, res, next) => {

@@ -116,10 +116,9 @@ module.exports.login = (req, res, next) => {
       res
         .cookie('jwt', token, {
           // token - наш JWT токен, который мы отправляем
-          maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
-          httpOnly: true, // такую куку нельзя прочесть из JavaScript
-          sameSite: 'None',
-          secure: false,
+          maxAge: 3600000 * 24 * 7,
+          httpOnly: true,
+          sameSite: true,
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })

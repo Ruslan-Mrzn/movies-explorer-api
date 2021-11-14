@@ -133,5 +133,11 @@ module.exports.login = (req, res, next) => {
 };
 
 module.exports.logout = (req, res) => {
-  res.clearCookie('jwt').send({ message: noticeCookiesCleared });
+  res.clearCookie('jwt', {
+    // token - наш JWT токен, который мы отправляем
+    maxAge: 3600000 * 24 * 7,
+    httpOnly: true,
+    sameSite: 'None',
+    secure: true,
+  }).send({ message: noticeCookiesCleared });
 };

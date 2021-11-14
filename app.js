@@ -48,5 +48,5 @@ app.use(errors()); // обработчик ошибок celebrate
 app.use(require('./middlewares/custom-errors-handler'));
 
 app.listen(PORT, () => {
-  console.log(`App listening on port ${PORT}, app mode is ${process.env.NODE_ENV ? 'production' : 'development'}`);
+  console.log(`App listening on port ${PORT}, app mode is ${process.env.NODE_ENV}`);
 });

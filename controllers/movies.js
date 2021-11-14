@@ -3,14 +3,12 @@ const Movie = require('../models/movie');
 const IncorrectDataError = require('../errors/incorrect-data-err');
 const ForbiddenError = require('../errors/forbidden-err');
 const NotFoundError = require('../errors/not-found-err');
-const ConflictError = require('../errors/conflict-err');
 
 const {
   incorrectMovieData,
   forbiddenMovieRemove,
   movieNotFound,
   incorrectMovieId,
-  conflictMovieId,
   noticeMovieRemoved,
 } = require('../utils/messages');
 
@@ -56,10 +54,6 @@ module.exports.createMovie = (req, res, next) => {
     .catch((err) => {
       if (err.name === 'ValidationError') {
         next(new IncorrectDataError(incorrectMovieData));
-        return;
-      }
-      if (err.name === 'MongoError' && err.code === 11000) {
-        next(new ConflictError(conflictMovieId));
         return;
       }
       next(err);

@@ -1,6 +1,6 @@
 const validator = require('validator');
 
-const { JWT_SECRET, MONGODB_ADDRESS } = process.env;
+const { NODE_ENV, JWT_SECRET, MONGODB_ADDRESS } = process.env;
 
 const {
   incorrectUrl,
@@ -16,7 +16,7 @@ module.exports.getSecret = () => {
 };
 
 module.exports.getMongoAddress = () => {
-  if (process.env.NODE_ENV === 'production') {
+  if (NODE_ENV === 'production') {
     return MONGODB_ADDRESS;
   }
   return 'mongodb+srv://rus_mur:929000@cluster0.21xks.mongodb.net/moviesdb?retryWrites=true&w=majority';

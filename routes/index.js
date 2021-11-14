@@ -19,7 +19,7 @@ router.post('/api/signin', validateUserSignin, login);
 
 router.use(require('../middlewares/auth'));
 
-router.post('/api/signout', logout);
+router.get('/api/signout', logout);
 
 router.use('/api/users', require('./users'));
 

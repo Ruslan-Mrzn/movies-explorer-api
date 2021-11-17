@@ -84,8 +84,7 @@ module.exports.createUser = (req, res, next) => {
               // token - наш JWT токен, который мы отправляем
               maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
               httpOnly: true, // такую куку нельзя прочесть из JavaScript
-              sameSite: 'None',
-              secure: true,
+              sameSite: 'Lax',
             })
             .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
         })
@@ -116,10 +115,9 @@ module.exports.login = (req, res, next) => {
       res
         .cookie('jwt', token, {
           // token - наш JWT токен, который мы отправляем
-          maxAge: 3600000 * 24 * 7,
-          httpOnly: true,
-          sameSite: 'None',
-          secure: true,
+          maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
+          httpOnly: true, // такую куку нельзя прочесть из JavaScript
+          sameSite: 'Lax',
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
@@ -135,9 +133,7 @@ module.exports.login = (req, res, next) => {
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt', {
     // token - наш JWT токен, который мы отправляем
-    maxAge: 3600000 * 24 * 7,
-    httpOnly: true,
-    sameSite: 'None',
-    secure: true,
+    httpOnly: true, // такую куку нельзя прочесть из JavaScript
+    sameSite: 'Lax',
   }).send({ message: noticeCookiesCleared });
 };

@@ -86,7 +86,7 @@ module.exports.createUser = (req, res, next) => {
               httpOnly: true, // такую куку нельзя прочесть из JavaScript
               sameSite: 'None',
               secure: true,
-              domain: '.murzin.ruslan.nomoredomains.rocks',
+              domain: 'murzin.ruslan.nomoredomains.rocks',
             })
             .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
         })
@@ -121,7 +121,7 @@ module.exports.login = (req, res, next) => {
           httpOnly: true, // такую куку нельзя прочесть из JavaScript
           sameSite: 'None',
           secure: true,
-          domain: '.murzin.ruslan.nomoredomains.rocks',
+          domain: 'murzin.ruslan.nomoredomains.rocks',
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
@@ -140,6 +140,6 @@ module.exports.logout = (req, res) => {
     httpOnly: true, // такую куку нельзя прочесть из JavaScript
     sameSite: 'None',
     secure: true,
-    domain: '.murzin.ruslan.nomoredomains.rocks',
+    domain: 'murzin.ruslan.nomoredomains.rocks',
   }).send({ message: noticeCookiesCleared });
 };

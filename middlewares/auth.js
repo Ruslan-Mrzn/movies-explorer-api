@@ -7,11 +7,12 @@ const { getSecret } = require('../utils/utils');
 const { unauthorized } = require('../utils/messages');
 
 module.exports = (req, res, next) => {
-  if (!req.cookies.jwt) {
+  const { cookie } = req.headers;
+  if (!cookie) {
     throw new UnauthorizedError(unauthorized);
   }
 
-  const token = req.cookies.jwt;
+  const token = cookie.replace('jwt=', '');
   let payload;
 
   try {

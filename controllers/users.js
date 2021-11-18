@@ -76,7 +76,7 @@ module.exports.createUser = (req, res, next) => {
         name, email, password: hash,
       })
         .then((user) => {
-          const token = jwt.sign({ _id: user._id }, getSecret());
+          const token = jwt.sign({ _id: user._id }, getSecret(), { expiresIn: '7d' });
           // отправим токен, браузер сохранит его в куках
 
           res
@@ -84,7 +84,9 @@ module.exports.createUser = (req, res, next) => {
               // token - наш JWT токен, который мы отправляем
               maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
               httpOnly: true, // такую куку нельзя прочесть из JavaScript
-              sameSite: 'Lax',
+              sameSite: 'None',
+              secure: true,
+              domain: '.murzin.ruslan.nomoredomains.rocks',
             })
             .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
         })
@@ -109,7 +111,7 @@ module.exports.login = (req, res, next) => {
     .then((user) => {
       // аутентификация успешна! пользователь в переменной user
       // создадим токен
-      const token = jwt.sign({ _id: user._id }, getSecret());
+      const token = jwt.sign({ _id: user._id }, getSecret(), { expiresIn: '7d' });
       // отправим токен, браузер сохранит его в куках
 
       res
@@ -117,7 +119,9 @@ module.exports.login = (req, res, next) => {
           // token - наш JWT токен, который мы отправляем
           maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
           httpOnly: true, // такую куку нельзя прочесть из JavaScript
-          sameSite: 'Lax',
+          sameSite: 'None',
+          secure: true,
+          domain: '.murzin.ruslan.nomoredomains.rocks',
         })
         .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
@@ -134,6 +138,8 @@ module.exports.logout = (req, res) => {
   res.clearCookie('jwt', {
     // token - наш JWT токен, который мы отправляем
     httpOnly: true, // такую куку нельзя прочесть из JavaScript
-    sameSite: 'Lax',
+    sameSite: 'None',
+    secure: true,
+    domain: '.murzin.ruslan.nomoredomains.rocks',
   }).send({ message: noticeCookiesCleared });
 };

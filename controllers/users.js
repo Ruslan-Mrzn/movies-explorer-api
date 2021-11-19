@@ -83,11 +83,12 @@ module.exports.createUser = (req, res, next) => {
             .cookie('jwt', token, {
               // token - наш JWT токен, который мы отправляем
               maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
-              // httpOnly: true, // такую куку нельзя прочесть из JavaScript
-              sameSite: 'None',
+              httpOnly: true, // такую куку нельзя прочесть из JavaScript
+              domain: '.nomoredomains.rocks',
+              sameSite: 'Lax',
               secure: true,
             })
-            .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
+            .end(); // если у ответа нет тела,можно использовать метод end
         })
         .catch((err) => {
           if (err.name === 'ValidationError') {
@@ -117,11 +118,12 @@ module.exports.login = (req, res, next) => {
         .cookie('jwt', token, {
           // token - наш JWT токен, который мы отправляем
           maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
-          // httpOnly: true, // такую куку нельзя прочесть из JavaScript
-          sameSite: 'None',
+          httpOnly: true, // такую куку нельзя прочесть из JavaScript
+          domain: '.nomoredomains.rocks',
+          sameSite: 'Lax',
           secure: true,
         })
-        .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
+        .end(); // если у ответа нет тела,можно использовать метод end
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -134,9 +136,9 @@ module.exports.login = (req, res, next) => {
 
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt', {
-    // token - наш JWT токен, который мы отправляем
-    // httpOnly: true, // такую куку нельзя прочесть из JavaScript
-    sameSite: 'None',
+    httpOnly: true, // такую куку нельзя прочесть из JavaScript
+    domain: '.nomoredomains.rocks',
+    sameSite: 'Lax',
     secure: true,
   }).send({ message: noticeCookiesCleared });
 };

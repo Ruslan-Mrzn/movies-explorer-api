@@ -7,16 +7,14 @@ const { getSecret } = require('../utils/utils');
 const { unauthorized } = require('../utils/messages');
 
 module.exports = (req, res, next) => {
-  const { cookie } = req.headers;
-  if (!cookie) {
+  if (!req.cookies.jwt) {
     throw new UnauthorizedError(unauthorized);
   }
 
-  const token = cookie.replace('jwt=', '');
   let payload;
 
   try {
-    payload = jwt.verify(token, getSecret());
+    payload = jwt.verify(req.cookies.jwt, getSecret());
   } catch (err) {
     if (err.name === 'JsonWebTokenError') {
       next(new UnauthorizedError(unauthorized));
@@ -25,7 +23,7 @@ module.exports = (req, res, next) => {
     next(err);
   }
 
-  req.user = payload; // записываем пейлоуд в объект запроса
+  req.user = payload.hidePassword(); // записываем пейлоуд в объект запроса
 
   next(); // пропускаем запрос дальше
 };

@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
-
+// const User = require('../models/user');
+// const { hidePassword } = User;
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const { getSecret } = require('../utils/utils');
@@ -23,7 +24,7 @@ module.exports = (req, res, next) => {
     next(err);
   }
 
-  req.user = payload.hidePassword(); // записываем пейлоуд в объект запроса
+  req.user = payload; // записываем пейлоуд в объект запроса
 
   next(); // пропускаем запрос дальше
 };

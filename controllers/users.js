@@ -84,8 +84,7 @@ module.exports.createUser = (req, res, next) => {
               // token - наш JWT токен, который мы отправляем
               maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
               httpOnly: true, // такую куку нельзя прочесть из JavaScript
-              domain: '.nomoredomains.rocks',
-              sameSite: 'Lax',
+              sameSite: 'None',
               secure: true,
             })
             .end(); // если у ответа нет тела,можно использовать метод end
@@ -119,8 +118,7 @@ module.exports.login = (req, res, next) => {
           // token - наш JWT токен, который мы отправляем
           maxAge: 3600000 * 24 * 7, // кука будет храниться 7 дней
           httpOnly: true, // такую куку нельзя прочесть из JavaScript
-          domain: '.nomoredomains.rocks',
-          sameSite: 'Lax',
+          sameSite: 'None',
           secure: true,
         })
         .end(); // если у ответа нет тела,можно использовать метод end
@@ -137,8 +135,7 @@ module.exports.login = (req, res, next) => {
 module.exports.logout = (req, res) => {
   res.clearCookie('jwt', {
     httpOnly: true, // такую куку нельзя прочесть из JavaScript
-    domain: '.nomoredomains.rocks',
-    sameSite: 'Lax',
+    sameSite: 'None',
     secure: true,
   }).send({ message: noticeCookiesCleared });
 };

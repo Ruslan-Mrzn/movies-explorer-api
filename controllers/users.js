@@ -87,7 +87,7 @@ module.exports.createUser = (req, res, next) => {
               sameSite: 'None',
               secure: true,
             })
-            .end(); // если у ответа нет тела,можно использовать метод end
+            .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
         })
         .catch((err) => {
           if (err.name === 'ValidationError') {
@@ -121,7 +121,7 @@ module.exports.login = (req, res, next) => {
           sameSite: 'None',
           secure: true,
         })
-        .end(); // если у ответа нет тела,можно использовать метод end
+        .send(user.hidePassword()); // если у ответа нет тела,можно использовать метод end
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {

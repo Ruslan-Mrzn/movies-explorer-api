@@ -1,6 +1,4 @@
 const jwt = require('jsonwebtoken');
-// const User = require('../models/user');
-// const { hidePassword } = User;
 const UnauthorizedError = require('../errors/unauthorized-err');
 
 const { getSecret } = require('../utils/utils');

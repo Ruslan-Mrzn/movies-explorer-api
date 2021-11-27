@@ -33,7 +33,7 @@ app.use(limiter); // ограничение кол-ва запросов (защ
 
 app.use(helmet()); // простановка security-заголовков http запросов
 
-app.use(cors({ credentials: true, origin: true, exposedHeaders: '*' })); // cors-мидвара
+app.use(cors({ credentials: true, origin: true, exposedHeaders: ['*', 'Authorization'] })); // cors-мидвара
 
 app.use(cookieParser(getSecret())); // подключаем парсер кук как мидлвэр
 
